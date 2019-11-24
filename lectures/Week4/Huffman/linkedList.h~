@@ -1,0 +1,26 @@
+typedef struct node {
+  int value;
+  struct node* next;
+} LinkedList;
+
+
+
+
+LinkedList* llCreate();
+int llIsEmpty(LinkedList* ll);
+void llDisplay(LinkedList* ll);
+void llAdd(LinkedList** ll, int newValue);
+void llFree(LinkedList* ll);
+
+struct tnode {
+
+  double weight;
+
+  int c;
+
+  struct tnode* left;
+
+  struct tnode* right;
+
+  struct tnode* parent;
+};

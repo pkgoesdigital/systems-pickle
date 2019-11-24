@@ -1,0 +1,14 @@
+#pragma omp parallel
+{
+  //parellelism
+  //parallel
+  //parallel
+  #pragma omp for nowait
+  for(...) {
+
+  } //barrier
+
+//joins
+//joins
+//joins
+}

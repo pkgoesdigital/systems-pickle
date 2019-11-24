@@ -1,0 +1,13 @@
+#include <string.h>
+#include <stdio.h>
+
+
+void displayInt(int i);
+//int makeInt(char* i);                                                                             
+int makeInt(char* s);
+
+
+typedef union intU {
+  unsigned int bits;
+  int theInt;
+} intU;

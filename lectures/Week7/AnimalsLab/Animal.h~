@@ -1,0 +1,20 @@
+#ifndef ANIMAL_H
+#define ANIMAL_H
+#include <iostream>
+
+class Animal {
+
+ protected: 
+    String color;
+    String noise;
+    String species;
+
+ public:
+    Animal();
+    Animal(String color, String species);
+    virtual ~Animal();
+    virtual String getColor();
+    virtual String makeSound();
+    virtual void print();
+};
+#endif

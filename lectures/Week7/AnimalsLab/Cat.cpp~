@@ -1,0 +1,41 @@
+class Cat : public Animal {
+
+private:
+  String name;
+
+
+public:
+  Dog() {
+    std::cout "Dog const\n";
+    name = "fido";
+  }
+
+  Dog(String n) {
+    std::cout << "Dog const1\n";
+    name = n;
+  }
+
+
+  Dog(String c, String s, String sp) : Animal(c, s, sp){
+    std::cout << "Dog const3\n";
+    name = n;
+  }
+
+  virtual ~Dog() {
+    std::cout << "Dog destructor\n";
+  }
+
+  String getColor() {
+    return this->color;
+  }
+
+  String getSound() {
+    return this->sound;
+  }
+
+  void print() {
+    std::cout << "Dog with color of " << color << " with sound " << sound << " named " << name <<\
+      "\n";
+  }
+
+};

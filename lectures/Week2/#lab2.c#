@@ -1,0 +1,160 @@
+//Paula Klimas
+
+#include <stdio.h> //printf and scanf
+#include <stdlib.h> //malloc
+#include <string.h> //reading in and working with strings
+
+//To further get used to the dual nature of [ ] array notion and the pointer counterpart, you should go through your code and change all array [ ] access to pointer based.  For example, arr[5] should be changed to *(arr + 5).  You should still use [ ] if you need to create any arrays, but only in creation.
+
+
+//change all int to char* and all int* to char**
+typedef struct freq {
+  int freq;
+  char* wordFromFile; //replace all instances of num with wordFromFile
+
+} Histogram ;
+
+//method signature declarations
+void displayScores(int numCount, char** charArray);
+char** readScores(int* numCount);
+void displayHistogram(Histogram* histogram,  int sizeOfHist);
+void sortHistogram(Histogram* histogram, int sizeOfHist);
+int calcHistogram(Histogram** histogramPointer, char** charArray, int numCount);
+
+int main() {
+  int numCount; //represents size of first array
+  char** charArray; //creates an array with memory pointer     
+  charArray = readScores(&numCount); //fill array with readScores function                   
+  int num; //size of Histogram array
+  Histogram* arrayPoint;
+ 
+  num = calcHistogram(&arrayPoint, charArray, numCount);
+
+  displayScores(numCount, charArray);
+
+  //displayHistogram(arrayPoint, num);
+
+  sortHistogram(arrayPoint, num);
+
+  displayHistogram(arrayPoint, num);
+
+  //freeing memory for charArray
+  for(int i = 0; i < numCount; ++i) {
+    free((*(charArray + i)));
+  }
+
+  //freeing memory for histogram 
+  free(arrayPoint);
+
+  //freeing memory for
+  free(charArray);
+
+  
+}
+
+char** readScores (int* numCount) {
+  
+  char** pointer;
+  char word[15]; //allocating enough space in array for up to 15 char words 
+  int i = 0;
+
+  //adding in malloc
+  pointer = (char**)malloc(100 * sizeof(char*));
+ 
+  if(pointer == NULL) {
+    printf("Memory not allocated.\n");
+    exit(0);
+  } else {
+    printf("Memory successfully allocated\n");
+    //fill array till EOF
+    while(scanf("%s", word) != EOF) { //while inputFile has word
+      int temp = strlen(word);
+//number of bytes a string takes is the number of chars in the string plus 1 (the terminator character) times the number of bytes per character (1 byte per char) 
+      (*(pointer + i)) = (char*)malloc((1 + temp) * temp); //allocate the exact amount of memory necessary for each word
+      //change to array notation here (was pointer[i])
+      strcpy((*(pointer + i)), word); 
+      printf("strlen(%lu) : word is %s\n", strlen(*(pointer + i)), word);
+      ++i;
+  } 
+  *numCount = i; //changing the value of numCount to i   
+  }
+  //free(pointer); //segFaults
+  return pointer;
+}
+
+void displayScores(int numCount, char** charArray){
+  //incrementing through the size of the histogram Array 
+  for(int i = 0; i < numCount; i++) {
+    printf("charArray[%d]: %s\n", i, (*(charArray + i))); //array notation - changed from charArray[i] to *(charArray + i)
+}
+}
+
+//old version took in pre-created array and its count & scores information
+//change so count info is passed back through return value rather than parameter
+//array should be create on the heap from within the function & passed back through return value
+int calcHistogram (Histogram** histogramPointer, char** charArray, int numCount){
+  int loneScores = 0;
+
+  //adding in malloc
+  //this is referencing a Histogram* pointer which is pointint to the pointer in main
+  Histogram* histogram  = (Histogram*)malloc(numCount * sizeof(Histogram));
+
+    //creating array on heap from within function
+    for(int i = 0; i < numCount; i++) {
+      int foundIt = 0;
+      int loopCount = 0;
+
+      while(loopCount < loneScores && !foundIt) {
+	//changed to array notation (additional parenthesis necessary!!!!)
+	if(strcmp((*(histogram + loopCount)).wordFromFile, *(charArray + i)) == 0) {
+	  //printf("same\n");
+	  (*(histogram + loopCount)).freq++;
+	  foundIt = 1;
+	} else {
+	  //printf("not same\n");
+	  ++loopCount;
+	  // printf("incremented loopCount\n");
+      }
+    }
+      if(loopCount == loneScores){
+	(*(histogram + loopCount)).wordFromFile = *(charArray + i);
+	(*(histogram + loopCount)).freq = 1;
+	++loneScores;
+	// printf("calcHistogram incremented loneScores\n");
+      }
+    }
+    printf("calcHistogram loneScores val: %d\n", loneScores);
+    *histogramPointer = histogram;  
+    //free(histogramPointer); //gives weird error
+ return loneScores;
+}
+
+
+void displayHistogram(Histogram* histogram,  int sizeOfHist) {  
+
+  //printing out the histogram frequencies
+  for(int i = 0; i < sizeOfHist; i++) { //incrementing through the size of the Histogram array
+    printf("value %s: freq %d\n",(*(histogram + i)).wordFromFile, (*(histogram + i)).freq); //(.) accesses members of struct defined up top ^^^
+}
+}
+
+//should modify the histogram array it is given to be in order by frequency
+void sortHistogram(Histogram* histogram, int sizeOfHist) {
+  int count = 0;
+  for(int i = 0; i < sizeOfHist; i++) {
+    //sort
+    int max = i;
+    for(int j = i; j < sizeOfHist; j++) {
+      //adjusted for array notation
+      if((*(histogram + j)).freq > (*(histogram + max)).freq) {
+	max = j;
+      }
+    }
+      if(max != i) {
+	//you've found max freq
+	Histogram temp = *(histogram + i);
+	*(histogram + i) = *(histogram + max);
+	*(histogram + max) = temp;
+      }
+  }
+}

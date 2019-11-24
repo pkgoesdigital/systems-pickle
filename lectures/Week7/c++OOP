@@ -1,0 +1,112 @@
+//talking about c++ some more - classes and OOP
+//emacs for c++
+#include <iostream>
+
+class Shape {
+private:
+  //vars here can only be accessed by shape
+
+protected:
+  int x;
+  int y;
+  //when they're here, shape and any class that inherits from shape can access them
+
+public:
+  //shape is an abstract idea - why are we making two shape constructors, when we'll actually be using particular shapes?
+  Shape() {
+    std::cout << "shape def const called\n";
+    this-> x = x;
+    this-> y = y;
+  }
+  Shape(int x, int y) {
+    std::cout << "shape 2 param called\n";
+    this-> x = x;
+    this-> y = y;
+  }
+
+
+};
+
+//this says : circle extends shape
+class Circle : public Shape{
+  //protection levels
+  //put private stuff in one section, public in another
+private:
+  // int x; //taken care of in Shape class now
+  // int y;
+  int radius;
+
+
+public:
+  //default constructor
+  Circle() : Shape() {
+    std::cout << "Circle default constant\n"
+    // this->x = 0;
+    // this->y = 0;
+    this->radius = 1;
+
+  }
+  //non-default, takes all variables
+  Circle(int x, int y, int r) : Shape(x, y) { //this assigns x,y and we are responsible for assigning other things
+    std::cout << "Circle 3 param const\n"
+    //this is a pointer to itself
+    // this->x = x;
+    // this->y = y;
+    this->radius = r;
+  }
+
+  //we need copy constructors in c++ - cannot use clones or anything else
+  //we need it in c++ and not in java because
+  //  Circle(Circle c) {//cannot be done like this because copy constructor needs a copy
+  Circle(const Circle& c) : Shape(c) { //pass by reference - using variables but not changing them
+    std::cout << "Circle copy constructor\n";
+    // this-> x = x;
+    // this-> y = y;
+    this->radius = c.radius;
+  }
+
+  //pass by references
+  int zyx(const Circle& c) { //const is used to tell computer we are passing an object by reference, but it forbids us from doing things like:
+    c.x = 5; //this would automaically dereference and change the original object - const allows us to keep the data where it belongs, and we're going to look over the the data, without changing the actual original object
+    //throws error:cannot assign to variable 'c' with const variable defined type
+    //can treat as an actual circle object here, is just going to dereference it and return
+    c.
+  }
+
+  ~Circle() {
+    //used when your Circle has instance variables that aren't simple primitives
+    //if you have a pointer to some other thing, it removes the object at the end of the pointer as well as the pointer
+    //delete this->coord;
+    std::cout << "Circle destructor called\n";
+  }
+
+
+}; //always have semicolon at end of class definition
+
+int main() {
+  Circle* c1 = new Circle(1,2,3); //created on heap
+  //need to use the * because we need to access it as a pointer, which is actually how it's created in C++
+  //we can actually make a shape on the runtime stack
+  //this is not able to be done in java
+  //to make a new object on the runtime stack do this:
+  Circle c2(3,4,5); //creates on runtime stack
+
+  c1->radius;
+
+  //pass by reference
+  //zyx(c2); //passes the memory address, and not the physical object
+
+  //default constructor
+  Circle c3 = new Circle();
+  //if you want to make a default shape on the runtime stack, don't use the parenthesis like this:
+  Circle c4; //creates default shape on runtime stack
+
+  //have to delete object from the heap - remember there is no garbage collector in c++
+  //objects do not need to be deteled off the runtime stack - like all things on the stack, they'll just go away after
+  //program execution finishes
+  //destructors
+  delete c1;
+  delete c3;
+
+
+}

@@ -1,0 +1,11 @@
+#include <stdio.h>
+#include <stdlib>
+
+int numPrimesInRange(int start, int stop) {
+  int numPrimes = 0;
+  if(start > stop) {
+
+  }
+
+
+}

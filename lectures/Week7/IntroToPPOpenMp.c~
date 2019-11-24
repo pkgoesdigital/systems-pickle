@@ -1,0 +1,8 @@
+
+//used to fork additional threads to carry out the work enclosed in the block following the #pragma construct
+//block is executed by all threads in parallel
+//original thread will be denoted as master thread with thread-id 0
+#pragma omp parallel 
+{
+  
+}

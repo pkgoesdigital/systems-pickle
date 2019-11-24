@@ -1,0 +1,5 @@
+#include <stdio.h> //printf and scanf
+#include <stdlib.h> //malloc
+#include <string.h> //reading in and working with strings
+
+typedef struct 

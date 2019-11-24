@@ -1,0 +1,21 @@
+#ifndef CAT_H
+#define CAT_H
+#include <iostream>
+#include "Animal.h"
+
+class Dog : public Animal {
+ private:
+  String name;
+
+
+ public:
+  Cat();
+  Cat(String c, String s, String sp);
+  Cat(const Cat& d);
+  virtual ~Cat();
+  //  String properties();                                                                        
+  void print();
+
+};
+#endif
+

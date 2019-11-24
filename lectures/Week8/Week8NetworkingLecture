@@ -1,0 +1,7 @@
+//Week8
+//https - hypertext transport protocol secure
+
+//ports - 80
+//things flying across the internet are out in the open - the s keeps people from being able to see the bytes going across
+
+//using sockets with networks

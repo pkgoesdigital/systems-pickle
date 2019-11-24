@@ -1,0 +1,16 @@
+#pragma omp parallel //reduction up here where we make the threads
+{
+  //parellelism
+  //parallel
+  //parallel
+  #pragma omp for nowait //put nowait at the very end
+  for(...) {
+
+  } //barrier
+
+//use nowait if we can figure it out - for lab thursday
+
+//joins
+//joins
+//joins
+}

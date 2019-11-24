@@ -1,0 +1,37 @@
+#include <iostream>
+#include "Animal.h"
+
+animal::Animal() {
+  std::cout << "Animal definition constructor\n";
+  this->color = "undefinedColor";
+  this->noise = "undefinedNoise";
+  this->species = "undefinedSpecies";
+}
+
+animal::Animal(String c, String n) {
+  std::cout << "Animal constructor2\n";
+  this->color = color;
+  this->noise = noise;
+  this->species = species;
+}
+
+//copy constructor
+animal::Animal(const Animal& a) {
+  std::cout << "Animal copy constructor\n";
+  this->color = a.color;
+  this->noise = a.noise;
+  this->species = a.species;
+
+}
+
+virtual animal::~Animal() {
+  std::cout << "Animal destructor\n";
+}
+
+//animal:: in front of method says it belongs to animal class
+
+
+
+virtual void print() {
+  std::cout << "generic animal\n";
+}

@@ -1,0 +1,60 @@
+//compile statement for assignment 1
+//gcc -g foo.c -o foo
+//-g helps with debugging - allows you to find which line program crashes (finds things you may not be able to find with print statements)
+
+//gnu debugger
+//gdb ./foo
+
+//backtrace - shows you all back calls
+//quit - quits
+
+//unix
+//ps //brings up all running current processes
+//grep //regular expression parser
+
+
+//parallel programming
+//fork();
+//execvp();
+
+
+//reference me for next programming assignment (assignment 2)
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <cis/wait.h>
+#include <signal.h>
+
+void handler(int sig) {
+  printf("handler called with siz %d\n", sig);
+
+}
+
+int main() {
+
+  signal(SIGCHLD, handler); //able to call handler because the function just exists in memory (essentialy)**
+
+  //forks program and makes it run "twice" - you can instruct other things from here
+  int pid = fork(); //child
+
+  if(pid == 0) {
+  //pid stands for process id
+  printf("child: %d\n", pid);
+
+  char* args[5];
+  args[0] = "./test"; //is actually running program called test
+  args[1] = NULL;
+  execvp(args[0], args);
+
+} else { //parent
+
+  printf("parent: %d\n", pid);
+
+  int status;
+  int result = waitpid(pid, &status, 0); //blocking version
+
+}
+
+  //while (1) {}
+
+}

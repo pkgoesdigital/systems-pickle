@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+int main() {
+
+  double x = 5.3;
+  int y = 8;
+  char c = 'a';
+  int q = 'a'; //this returns the int value assigned to this char
+  //char c = 98; this returns the character assigned to the ascii value
+  //in c and c++ chars are 1 byte long (8 bits) as opposed to java chars are 2 bytes 
+
+  //characters and integers are interchangeable in c because of ascii code! a is in fact a 97 in ascii code
+  printf{"The value of x is %lf and y is %d and %c \n", x, y, c);
+  
+  //if statements are the exact same in c
+  //if you do this: if(y = 8) 8 will be shoved into y - this command will not compile in java - booleans are integers in c- anything not 0 is true
+  if (y == 7) {
+    printf("equals\n");
+  } //else {
+  //something else
+  // }
+
+  return 0;

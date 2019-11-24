@@ -1,0 +1,22 @@
+#ifndef DUCK_H
+#define DUCK_H
+#include <iostream>
+#include "Animal.h"
+
+class Dog : public Animal {
+ private:
+  String name;
+
+
+ public:
+  Dog();
+  Dog(String c, String s, String sp);
+  Dog(const Dog& d);
+  virtual ~Dog();
+  //  String properties();                                                                        
+  virtual getColor();
+  virtual makeSound();
+  void print();
+
+};
+#endif

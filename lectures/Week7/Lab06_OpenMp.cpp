@@ -1,0 +1,138 @@
+#include <thread>
+#include <iostream>
+#include <omp.h>
+#include <mutex>
+#include <stdio.h>
+
+//declarations
+int isPrime(int num);
+int numPrimesInRange(int start, int stop);
+void func(int threadID, int start, int stop, int* results);
+int blocking(int start, int stop);
+int striping(int start, int stop);
+
+
+int main() {
+  omp_set_num_threads(5);
+  int numThreads = 5;
+
+  blocking(10, 100);
+  blocking(1000,1000000);
+
+  striping(10, 100);
+  striping(1000, 1000000);
+
+}
+
+int blocking(int start, int stop) {
+
+  //checking how many threads are running
+  double numThreads = omp_get_num_threads();
+  int i = 0;
+
+  int elementsPerThread = (stop-start)/numThreads;
+
+  //timing stuff
+  printf("BLOCKING\n");
+  int primeCountBlocking = 0;
+  double startTime;
+  double endTime;
+
+#pragma omp parallel
+  {
+    startTime = omp_get_wtime();
+#pragma omp parallel for schedule(static, elementsPerThread)
+    //for loop to parallelize
+  for(i = 0; i < stop-start; i++) {
+    printf("Thread ID: %d i = %d\n", omp_get_thread_num(), i);
+    primeCountBlocking = numPrimesInRange(start, stop);
+  } //end of parallel block
+  endTime = omp_get_wtime();
+  }
+
+    printf("There are %d prime numbers in given range using blocking.\n", primeCountBlocking);
+    printf("Time for blocking: %d\n", endTime - startTime);
+
+    return primeCountBlocking;
+  }
+
+
+
+  int striping(int start, int stop) {
+
+    //check how many threads are going
+    double numThreads = omp_get_num_threads();
+    int i = 0;
+
+    //timing stuff
+    printf("STRIPING\n");
+    int primeCountStriping = 0;
+    double startTime;
+    double endTime;
+
+  #pragma omp parallel
+    {
+      startTime = omp_get_wtime();
+  #pragma omp for schedule(static, 1)
+    for(i = 0; i < stop-start; i++) {
+      if(isPrime(i)) {
+        primeCountStriping += 1;
+      }
+
+        printf("There are %d prime numbers in given range using striping.\n", primeCountStriping);
+        printf("Time for striping:%d\n", endTime - startTime);
+
+        return primeCountStriping;
+
+      }
+
+
+
+      void func(int threadID, int start, int stop, int* results) {
+        printf("I'm ThreadID %i, with Range [%i, %i]\n", threadID, start, stop);
+        results[threadID] = numPrimesInRange(start, stop);
+        //printf("I'm ThreadID %i, with Range [%i, %i]\n", threadID, start, stop);
+      }
+
+
+      //calculate numPrimes based on range passed in
+      int numPrimesInRange(int start, int stop) {
+        int numPrimes = 0;
+        if(start > stop) {
+          printf("%i cannot be greater than stop - redefine range", start);
+          return start;
+        }
+
+        int i = start;
+        while(i <= stop) {
+          if(isPrime(i) == true) {
+            ++numPrimes;
+            ++i;
+          }
+          else {
+            isPrime(i);
+            ++i;
+          }
+        }
+        return numPrimes;
+      }
+
+
+      //determines whether param is a prime number
+      int isPrime(int num) {
+        int i = 2;
+        int flag = 1;
+
+  while((i < num) && flag) {
+    //condition for non-prime
+    if(num % i == 0) {
+      flag = 0;
+    }
+    ++i;
+  }
+  if(flag) {
+    return 1;
+  }
+  //stop early if not prime (return)
+  return 0;
+}
