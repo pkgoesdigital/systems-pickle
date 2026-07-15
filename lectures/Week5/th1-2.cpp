@@ -9,7 +9,7 @@ void func(int threadID, int start, int stop, int* results)
       std::cout<<"thread id: " << threadID <<", Iteration: "<<i<<"\n";
     }
   results[threadID] = threadID+3;
-  *myInt = 10;
+  //*myInt = 10; // lecture leftover — myInt was never declared in this variant
 }
 int main(int argc, const char * argv[])
 {

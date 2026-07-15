@@ -1,6 +1,7 @@
 //class 4 notes
 
 #include <stdio.h>
+#include <stdlib.h> //malloc/free — was missing; modern compilers reject implicit declarations
 
 typedef int coord;
 
@@ -10,13 +11,23 @@ int main() {
   free(a); //frees heap memory *don't double free!!! major crash
   a = NULL; //null frees the memory - is nice to do in order to get segmentation fault errors so you can troubleshoot easier
 
-  a[2] = 5; //this is legal, but it changes the memory so things will be accessed differently
+  // a[2] = 5; //this is legal, but it changes the memory so things will be accessed differently
+  //  ^ uncomment to watch it crash. Because a was just set to NULL, this
+  //    writes to address 0x8 and the program dies with SIGSEGV — which is
+  //    exactly the "nice to do ... so you can troubleshoot easier" payoff
+  //    the line above describes. Left commented so the file runs clean.
 
 
 }
 
+// Second transcription from the same class — a C-strings walkthrough.
+// Guarded out so this file compiles as one translation unit (two main()s
+// can't coexist); it is also an unfinished draft: the buffer is declared
+// `str` but used as `str1` throughout. The finished version of this exact
+// program is lec3.c in this folder.
+#if 0
 #include <stdio.h>
-#include <String.h> //includes all string things
+#include <string.h> //includes all string things
 
 typedef int coord;
 
@@ -62,5 +73,6 @@ printf("%s\n", str1);
   // coord c;
   //
 }
+#endif
 
 //lab02 - we need to use malloc to make the arrays in the methods, and change the arrays into dealing with words and not numbers

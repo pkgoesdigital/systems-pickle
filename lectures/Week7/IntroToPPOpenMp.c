@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     #pragma omp parallel for
   for (i = 0; i < 100000; i++) {
     a[i] = 2 * i;
-    printf("assigning i = %d\n");
+    printf("assigning i = %d\n", i); //the 2019 line had no argument for %d — printf read whatever was in the register
   }
 
   return 0;

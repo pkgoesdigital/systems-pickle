@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <unistd.h>
+#include <unistd.h> // read/write/close — was commented out; modern compilers reject implicit function declarations (hard error since clang 15/gcc 14)
 //#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -15,6 +15,13 @@ int main() {
     printf("ERROR opening socket");
     exit(1);
   }
+
+  // Allow the port to be reused immediately after this program exits.
+  // Without this, a closed socket sits in TIME_WAIT for ~60s and re-running
+  // head fails with "ERROR on binding" — the single most common surprise
+  // when writing your first server.
+  int reuse = 1;
+  setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
 
   // port number
   int portno = 8098;

@@ -24,7 +24,9 @@ int main() {
 
   //  Rational* r3 = r1->mult(r4);
 
-  Rational* r3 = r1 * r2;  // r1.operator*(r4);
+  Rational* r3 = *r1 * r2;  // (*r1).operator*(r2) — r1 is a pointer, so it
+                            // must be dereferenced; `r1 * r2` asks C++ to
+                            // multiply a pointer by an object
 
   //Rational* r3 = r1.mult(r2);
   //  Rational* r3 = r2 * r2;  // r1.operator*(r4);

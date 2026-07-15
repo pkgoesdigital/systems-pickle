@@ -9,12 +9,18 @@ int numPrimesInRange(int start, int stop);
 void func(int threadID, int start, int stop, int* results);
 
 
-int main() {
+// Counts primes in [min, max) across N threads. The defaults below are the
+// 2019 lab values; they take a while, because isPrime() is deliberately the
+// naive O(n) trial division — the slowness is what makes the threading
+// speedup visible. The range is now overridable so the program can be
+// exercised quickly:  ./threads [min] [max] [numThreads]
+int main(int argc, char* argv[]) {
 
-  int numThreads = 4;
+  int min        = (argc > 1) ? atoi(argv[1]) : 1000;
+  int max        = (argc > 2) ? atoi(argv[2]) : 1000000;
+  int numThreads = (argc > 3) ? atoi(argv[3]) : 4;
+
   int* results = (int*)malloc(numThreads*sizeof(int));
-  int min = 1000;
-  int max = 1000000;
 
   std::thread* threads[numThreads];
 

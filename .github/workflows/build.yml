@@ -1,0 +1,38 @@
+# Proves the course still compiles and runs. In 2019 each program was built
+# by hand on a laptop and the binary committed beside its source; this
+# workflow is what replaces that ritual with something reproducible.
+#
+# Ubuntu's gcc has OpenMP built in, so the two OpenMP programs (piomp,
+# Lab06_OpenMp) are exercised here even though AppleClang can't build them
+# without `brew install libomp`.
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gcc:
+    name: build + smoke test (gcc)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compiler versions
+        run: cc --version && c++ --version
+      - name: Build every program
+        run: make
+      - name: Smoke test
+        run: make test
+
+  clang:
+    name: build (clang, no OpenMP)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Second compiler catches things gcc waves through. Clang on the CI
+      # image has no OpenMP runtime, so OPENMP="" drops the flag — the same
+      # escape hatch macOS users need.
+      - name: Build with clang
+        run: make CC=clang CXX=clang++ OPENMP=""

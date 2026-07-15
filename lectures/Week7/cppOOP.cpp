@@ -40,7 +40,7 @@ private:
 public:
   //default constructor
   Circle() : Shape() {
-    std::cout << "Circle default constant\n"
+    std::cout << "Circle default constant\n";
     // this->x = 0;
     // this->y = 0;
     this->radius = 1;
@@ -48,7 +48,7 @@ public:
   }
   //non-default, takes all variables
   Circle(int x, int y, int r) : Shape(x, y) { //this assigns x,y and we are responsible for assigning other things
-    std::cout << "Circle 3 param const\n"
+    std::cout << "Circle 3 param const\n";
     //this is a pointer to itself
     // this->x = x;
     // this->y = y;
@@ -67,10 +67,12 @@ public:
 
   //pass by references
   int zyx(const Circle& c) { //const is used to tell computer we are passing an object by reference, but it forbids us from doing things like:
-    c.x = 5; //this would automaically dereference and change the original object - const allows us to keep the data where it belongs, and we're going to look over the the data, without changing the actual original object
+    // c.x = 5; //this would automaically dereference and change the original object - const allows us to keep the data where it belongs, and we're going to look over the the data, without changing the actual original object
     //throws error:cannot assign to variable 'c' with const variable defined type
+    //  ^ kept commented: uncomment it to see the compiler enforce const —
+    //    that refusal is the whole lesson of this section
     //can treat as an actual circle object here, is just going to dereference it and return
-    c.
+    return c.radius;
   }
 
   ~Circle() {
@@ -91,13 +93,13 @@ int main() {
   //to make a new object on the runtime stack do this:
   Circle c2(3,4,5); //creates on runtime stack
 
-  c1->radius;
+  // c1->radius; //private member — the compiler refuses from out here; that's encapsulation doing its job
 
   //pass by reference
   //zyx(c2); //passes the memory address, and not the physical object
 
   //default constructor
-  Circle c3 = new Circle();
+  Circle* c3 = new Circle(); //new returns a POINTER — the 2019 note wrote `Circle c3 = new Circle();`, which the compiler rejects
   //if you want to make a default shape on the runtime stack, don't use the parenthesis like this:
   Circle c4; //creates default shape on runtime stack
 
