@@ -47,9 +47,17 @@ place so the course runs on a 2026 compiler:
   / gcc 14+). `head.c` called `read`/`write` with `<unistd.h>` commented
   out; `lecture3.c` called `malloc` without `<stdlib.h>`; `lecture6.c`
   included `<cis/wait.h>` (the department's course code, not a real header).
-- **Case-sensitive includes.** `main.cpp` included `shape.h`/`circle.h`/
-  `rectangle.h`; the files are `Shape.h`/`Circle.h`/`Rect.h`. That works on
-  macOS and fails on Linux — which is where CI runs.
+- **This was a Mac-only codebase, and it showed.** Four separate breakages
+  only appear once you build on Linux, which is why CI does:
+  - **Case-sensitive includes** — `main.cpp` included `shape.h`/`circle.h`/
+    `rectangle.h`; the files are `Shape.h`/`Circle.h`/`Rect.h`.
+  - **`-lm`** — `baseConv.c` calls `pow()`. glibc keeps the math functions
+    in a separate library; macOS folds them into libSystem.
+  - **`<cstring>`** — AnimalsLab used `strcpy` without including it. macOS
+    libc++ leaks it in through `<iostream>`; libstdc++ doesn't.
+  - **`h_addr`** — `node.c` used this compatibility macro, which glibc
+    hides under strict `-std=c11`. It expands to `h_addr_list[0]`, which is
+    what the code says now.
 - **`shape.cpp`/`circle.cpp`/`rectangle.cpp` never compiled at all**: they
   re-declared whole classes instead of defining the methods, wrote
   `virtual` on out-of-class definitions, and named the class `shape` while
@@ -57,8 +65,11 @@ place so the course runs on a 2026 compiler:
 - **Real bugs fixed**: a use-after-free in `main.cpp` (copying `*r1` after
   `delete r1`), a `printf("%d\n")` with no argument, `int temp == *pp`,
   `printf{...}`, an unterminated `printf("%d %d\n", a[0], *(a+1);`, an
-  out-of-bounds `a[6]` on `int a[5]`, and a linked list whose `llAdd` took
-  `LinkedList*` where its own comments explain it needs `LinkedList**`.
+  out-of-bounds `a[6]` on `int a[5]`, a linked list whose `llAdd` took
+  `LinkedList*` where its own comments explain it needs `LinkedList**`, and
+  `binToDec()` summing into an **uninitialized** int — it returned the right
+  answer only because the stack garbage happened to be zero, so the smoke
+  test now pins it at 25.
 - **`head.c` now sets `SO_REUSEADDR`** so re-running the server doesn't die
   with "ERROR on binding" for a minute after each exit.
 - **`threads.cpp` takes its range as arguments** (`./threads [min] [max]
@@ -66,6 +77,19 @@ place so the course runs on a 2026 compiler:
   prime below a million.
 - **Editor and OS cruft removed**: `*~` backups, `#autosave#` files,
   8 `.DS_Store`, `Thumbs.db`, a broken symlink, and a duplicate zip.
+
+### The lab that never compiled
+
+`Week7/Lab06_OpenMp.cpp` (blocking vs striping prime counting) was submitted
+as a draft that had never built: `striping()` left its `#pragma omp parallel`
+block unclosed, which quietly nested every following function inside it, and
+returned from inside an OpenMP structured block. Those structural errors are
+fixed so it compiles — but the **algorithm is left as submitted**, with its
+five real bugs catalogued in the file's header comment (threads counted
+outside the parallel region, the whole range recomputed every iteration,
+unsynchronized shared counters, striping counting the wrong values). Fixing
+them one at a time, and watching the counts and timings change, is the lab.
+Because bug #2 makes it quadratic, CI proves it builds but doesn't run it.
 
 ### Two files where the errors are the lesson
 
@@ -102,6 +126,9 @@ a knowable answer, checks it — the linked list prints `[1, 2, 3, 4, ]`, both
 pair: `head` in the background, `node` against it, asserting the message
 crosses in both directions.
 
-Two programs are skipped on purpose: `forkwaitexample` sleeps 25 seconds to
-demonstrate `waitpid`, and `lecture6` `execvp`s a `./test` binary the notes
-never included.
+Three programs are skipped on purpose: `forkwaitexample` sleeps 25 seconds to
+demonstrate `waitpid`, `lecture6` `execvp`s a `./test` binary the notes never
+included, and `Lab06_OpenMp` is quadratic as submitted (see above).
+
+Current results — Linux/gcc **37 passed**, macOS **36 passed** (the two
+OpenMP programs need `libomp` there), 0 failed.
