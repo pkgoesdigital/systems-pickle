@@ -108,7 +108,6 @@ echo "== threading / OpenMP (small ranges so they finish)"
 [ -x "$B/threads" ] && run 30 threads "$B/threads" 1000 20000 4
 [ -x "$B/IntroToPPOpenMp" ] && run 30 IntroToPPOpenMp "$B/IntroToPPOpenMp"
 [ -x "$B/piomp" ] && expect piomp "$B/piomp" "3.14"
-[ -x "$B/Lab06_OpenMp" ] && run 30 Lab06_OpenMp "$B/Lab06_OpenMp"
 
 echo
 echo "== Week8 sockets (head + node, end to end on port 8098)"
@@ -147,6 +146,10 @@ echo
 echo "== skipped by design"
 skipped forkwaitexample "sleeps 25s on purpose to demo waitpid/SIGCHLD"
 skipped lecture6        "execvp()s ./test, which the notes never included"
+# Builds (that is what CI proves), but as submitted blocking() recomputes
+# numPrimesInRange(start, stop) inside every one of ~1e6 iterations, so it
+# cannot finish. Left as-is on purpose — see the header of Lab06_OpenMp.cpp.
+[ -x "$B/Lab06_OpenMp" ] && skipped Lab06_OpenMp "quadratic as submitted; see its header comment"
 
 echo
 echo "-------------------------------"

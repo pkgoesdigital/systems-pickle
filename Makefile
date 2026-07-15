@@ -30,10 +30,10 @@ LDLIBS   := -lm
 #   -Xpreprocessor -fopenmp -lomp   AppleClang + homebrew libomp
 #   (none)                          no OpenMP -> those 2 programs are skipped
 # Override explicitly if the probe guesses wrong: make OPENMP="-fopenmp"
-OMP_PROBE := $(shell printf '\#include <omp.h>\nint main(){return omp_get_num_threads();}\n' > .omp_probe.c 2>/dev/null; \
-  if $(CXX) -fopenmp -x c++ .omp_probe.c -o /dev/null >/dev/null 2>&1; then echo 'FOPENMP'; \
-  elif $(CXX) -Xpreprocessor -fopenmp -lomp -x c++ .omp_probe.c -o /dev/null >/dev/null 2>&1; then echo 'LIBOMP'; \
-  else echo 'NONE'; fi; rm -f .omp_probe.c)
+OMP_PROBE := $(shell \
+  if $(CXX) -fopenmp -x c++ tests/omp_probe.c -o /dev/null >/dev/null 2>&1; then echo 'FOPENMP'; \
+  elif $(CXX) -Xpreprocessor -fopenmp -lomp -x c++ tests/omp_probe.c -o /dev/null >/dev/null 2>&1; then echo 'LIBOMP'; \
+  else echo 'NONE'; fi)
 
 ifeq ($(OMP_PROBE),FOPENMP)
   OPENMP ?= -fopenmp
