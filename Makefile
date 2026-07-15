@@ -17,6 +17,12 @@ CXXFLAGS := -std=c++17 -Wall
 PTHREAD  := -pthread
 B        := build
 
+# Link libm. baseConv.c calls pow(); on Linux/glibc the math functions live
+# in a separate library and the link fails without this. macOS folds math
+# into libSystem, so it links there either way — which is exactly how this
+# went unnoticed until CI built the repo on Linux.
+LDLIBS   := -lm
+
 # OpenMP needs a flag the base compiler doesn't imply, and AppleClang has no
 # OpenMP runtime at all unless you `brew install libomp`. Rather than make
 # every macOS user pass a flag, probe the compiler once and adapt:
@@ -114,7 +120,7 @@ $(B):
 # Generate a rule per single-file program from the name:source lists above.
 define C_RULE
 $(B)/$(word 1,$(subst :, ,$(1))): $(word 2,$(subst :, ,$(1))) | $(B)
-	$(CC) $(CFLAGS) $$< -o $$@
+	$(CC) $(CFLAGS) $$< -o $$@ $(LDLIBS)
 $(word 1,$(subst :, ,$(1))): $(B)/$(word 1,$(subst :, ,$(1)))
 endef
 define CXX_RULE

@@ -6,8 +6,11 @@
 
 //create two functions that perform binary to decimal conversion and back
 
-int binToDec(char* bin) { //passing in char array named bin (pointer to char array technically)  
-  int decimalToReturn;
+int binToDec(char* bin) { //passing in char array named bin (pointer to char array technically)
+  int decimalToReturn = 0; //MUST be initialized — `+=` below reads it first.
+                           //Uninitialized locals hold whatever was on the
+                           //stack; this printed the right answer only
+                           //because that garbage happened to be 0.
   int digitCounter = 0;
   // printf("digitCounter: %d\n", digitCounter);
 

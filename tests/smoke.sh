@@ -60,6 +60,10 @@ echo
 echo "== checked output"
 # Week4 linked list: builds [1,2,3,4] then frees it
 expect linkedList     "$B/linkedList"       "[1, 2, 3, 4, ]"
+# Week3 base conversion: binary 11001 is 25. This one is worth pinning —
+# binToDec() summed into an uninitialized int, so it was returning the right
+# answer only by luck of what sat on the stack.
+expect baseConv       "$B/baseConv"         "decimalToReturn: 25"
 # Week6 pi approximations — both should land near 3.14
 expect pi             "$B/pi"               "3.14"
 expect pithread       "$B/pithread"         "3.14"
