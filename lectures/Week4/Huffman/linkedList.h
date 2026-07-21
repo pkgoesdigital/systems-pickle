@@ -1,12 +1,17 @@
 #include <stdio.h>
-#include <stdlib.h> // malloc  
+#include <stdlib.h> // malloc
 
 
-/* typedef struct node {
+typedef struct node {
   int value;
   struct node* next;
-  } LinkedList; */
+} LinkedList;
 
+// Huffman tree node. In 2019 this typedef replaced the node struct above
+// and was *also* named LinkedList — which broke linkedList.c, whose code
+// still used .value/.next. Both now coexist under their own names; the
+// tree node belonged to the hcompress assignment (see
+// hcompress-fragment.c.txt and HuffmanSubmission.docx).
 typedef struct tnode {
 
   int frequency;
@@ -18,7 +23,7 @@ typedef struct tnode {
   struct tnode* right;
 
   struct tnode* parent;
-} LinkedList;
+} TreeNode;
 
 
 LinkedList* llCreate();
@@ -26,5 +31,3 @@ int llIsEmpty(LinkedList* ll);
 void llDisplay(LinkedList* ll);
 void llAdd(LinkedList** ll, int newValue);
 void llFree(LinkedList* ll);
-
-

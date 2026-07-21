@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <cis/wait.h>
+#include <sys/wait.h> //typo in the 2019 notes: "cis/wait.h" (CIS was the department code)
 #include <signal.h>
 
 void handler(int sig) {

@@ -12,7 +12,7 @@ LinkedList* llCreate() {
 }
 
 
-void llAdd(LinkedList* l, int item) {
+void llAdd(LinkedList** l, int item) { //takes ** so the empty-list case can rewrite the caller's head pointer — exactly what the comments below describe
   
   //LinkedList newNode; //this creates on runtime stack - need to malloc
   LinkedList* newNode = (LinkedList*)malloc(1 * sizeof(LinkedList));
@@ -33,8 +33,11 @@ void llAdd(LinkedList* l, int item) {
   }
 }
 
-void llDisplay(LinkedList *1){
-
+void llDisplay(LinkedList *l){
+  for (LinkedList* p = l; p != NULL; p = p->next) {
+    printf("%d ", p->value);
+  }
+  printf("\n");
 }
 
 
@@ -44,7 +47,9 @@ int main() {
   LinkedList* l = llCreate(); //makes new LL and hands it back after call //l will really be a pointer to head of linkedList
 
   //addNodemethod
-  llAdd(l, 2); //parameter is second, l is reference to linkedList
+  llAdd(&l, 2); //parameter is second, &l because llAdd may rewrite our head pointer
+  llAdd(&l, 5);
+  llDisplay(l);
 
 
   

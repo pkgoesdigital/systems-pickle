@@ -3,7 +3,7 @@
 
 int* fill(int* b, int* c) { //int* is memory address for b (pointer to the int)
   //  int b[10]; //creates array on runtime stack
-  int* b =  (int*)malloc(10 * sizeof(int)); //cast to int* to make sure the types match (not always necessary but good practice)
+  b =  (int*)malloc(10 * sizeof(int)); //cast to int* to make sure the types match (not always necessary but good practice)
   //malloc stands for memory location MALLOC WORKS ONLY IN BYTES - allocates that number of bytes on the heap(in this case, 40)
   int n = 5;
   for(int i = 0; i < n; ++i) {
@@ -56,7 +56,7 @@ int main() {
   }
 
   int val = search(a, count, 4); //pass things around with this, anytime we're doing things with multiple components (values and pointers)
-  printf("%d\n", a[i]);
+  printf("\nfound at index %d\n", val);
 
 }
 //c and c++ do NOT have a garbage collector - it is OUR responsibility to get rid of things in the heap and keep track of what's in memory
@@ -65,8 +65,9 @@ int main() {
 
 
 
-//in-class code
-
+//in-class code — same program from the prof; guarded out so the file
+//compiles as a single translation unit
+#if 0
 #include <stdio.h>   // printf/scanf
 #include <stdlib.h>  // malloc
 int search(int* a, int size, int target) {
@@ -108,3 +109,4 @@ int main() {
   //  a[2] = 3;
   //  *(a+2) = 3;
 }
+#endif

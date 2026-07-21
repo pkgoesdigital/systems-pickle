@@ -43,7 +43,11 @@ int main() {
     fprintf(stderr,"ERROR, no such host\n");
     exit(0);
   }
-  memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);  /// dest, src, size
+  // h_addr_list[0] is the first address for the host. The 2019 line said
+  // `server->h_addr`, which is only a compatibility macro for exactly this
+  // — and glibc hides it under strict -std=c11, so it built on macOS and
+  // failed on Linux.
+  memcpy(&serv_addr.sin_addr.s_addr, server->h_addr_list[0], server->h_length);  /// dest, src, size
 
   // Connect to the server
   if (connect(sockfd,(struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {

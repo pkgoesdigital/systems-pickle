@@ -1,0 +1,16 @@
+# Build output — `make` writes every binary here
+build/
+
+# Compiled artifacts (13 Mach-O binaries and 16 .class files were committed
+# in 2019; they only ever ran on the laptop that produced them)
+*.o
+*.class
+*.out
+*.exe
+
+# Editor and OS cruft
+*~
+\#*\#
+.\#*
+.DS_Store
+Thumbs.db

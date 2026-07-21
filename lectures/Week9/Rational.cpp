@@ -42,15 +42,11 @@ Rational::~Rational() {
     std::cout << "Dest called\n";
 }
 
-virtual ~Rational() {
-
-}
-
-//const keeps it from being changed 
-Rational* mult(const Rational& r) const {
-  Rational* nr = new Rational(this->num*r.num,this->dem*r.dem);
-  return nr;
-}
+// Removed two lecture leftovers that can't exist at file scope: a
+// free-standing `virtual ~Rational()` (virtual, and a second destructor, are
+// only legal inside a class) and a const-qualified free function `mult()`
+// (only member functions can be const — its behavior lives on as operator*
+// above).
 
 void Rational::display() {
     std::cout << num << "/" << dem << "\n";

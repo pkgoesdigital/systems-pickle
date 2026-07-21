@@ -50,7 +50,9 @@ int main() {
 }
 
 
-//in class code from prof
+//in class code from prof — identical program; guarded out so the file
+//compiles as a single translation unit (two main()s can't coexist)
+#if 0
 #include <stdio.h>
 #include <string.h> // all string stuff
 typedef struct foo {
@@ -88,3 +90,4 @@ int main() {
   coord c;
   */
 }
+#endif
